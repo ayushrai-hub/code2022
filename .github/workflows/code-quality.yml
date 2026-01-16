@@ -1,0 +1,93 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  format-check:
+    name: Code Formatting Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Python formatters
+        run: |
+          python -m pip install --upgrade pip
+          pip install black ruff
+      
+      - name: Install Prettier
+        run: |
+          npm install -g prettier
+      
+      - name: Check Python formatting
+        run: |
+          echo "Checking Python code formatting..."
+          black --check GenAI/genAI OutLier-AI || echo "⚠️ Some Python files need formatting"
+        continue-on-error: true
+      
+      - name: Check JavaScript/TypeScript formatting
+        run: |
+          echo "Checking JS/TS code formatting..."
+          prettier --check "portfolio/**/*.{js,jsx,ts,tsx,json}" \
+                   "iha-by-himani/**/*.{js,jsx,ts,tsx,json}" \
+                   "MogoDb/**/*.{js,jsx,ts,tsx,json}" \
+                   "new/**/*.{js,jsx,ts,tsx,json}" || echo "⚠️ Some JS/TS files need formatting"
+        continue-on-error: true
+
+  lint-check:
+    name: Linting Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Python linters
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff pylint
+      
+      - name: Install ESLint
+        run: |
+          npm install -g eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+      
+      - name: Run Python linters
+        run: |
+          echo "Running Python linters..."
+          ruff check GenAI/genAI OutLier-AI || echo "⚠️ Ruff found issues"
+          pylint GenAI/genAI OutLier-AI --rcfile=.pylintrc || echo "⚠️ Pylint found issues"
+        continue-on-error: true
+      
+      - name: Run JavaScript/TypeScript linters
+        run: |
+          echo "Running JS/TS linters..."
+          eslint "portfolio/**/*.{js,jsx,ts,tsx}" \
+                "iha-by-himani/**/*.{js,jsx,ts,tsx}" \
+                "MogoDb/**/*.{js,jsx,ts,tsx}" \
+                "new/**/*.{js,jsx,ts,tsx}" \
+                --ext .js,.jsx,.ts,.tsx || echo "⚠️ ESLint found issues"
+        continue-on-error: true

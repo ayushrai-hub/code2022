@@ -1,0 +1,25 @@
+# OutLier-AI - Python ML/AI Scripts
+# Python Dependencies
+
+# Core Python (standard library used in most scripts)
+# json - JSON data handling
+# math - Mathematical operations
+# collections - Data structures
+
+# Common ML/AI Libraries (add as needed per script)
+# numpy>=1.24.0          # Numerical computing
+# pandas>=2.0.0          # Data manipulation
+# matplotlib>=3.7.0      # Plotting
+# scikit-learn>=1.3.0    # Machine learning
+# tensorflow>=2.13.0     # Deep learning (if needed)
+# torch>=2.0.0           # PyTorch (if needed)
+
+# Development Dependencies (optional)
+# pytest>=7.4.0          # Testing framework
+# pytest-cov>=4.1.0      # Coverage reporting
+# black>=23.9.0           # Code formatting
+# flake8>=6.1.0           # Linting
+# mypy>=1.5.0             # Type checking
+
+# Note: Install only the packages needed for specific scripts
+# Most scripts appear to use only Python standard library
